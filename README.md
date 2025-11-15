@@ -129,7 +129,13 @@ MIT License - see LICENSE file for details
 
 ## 👥 Team
 
-Built by Ghana Sui Builders
+Built by totalbeginers-Suitters
+
+Team Members
+DC Ablorh
+KaeyTee
+Kwame
+Yaw
 
 ## 🔗 Links
 
