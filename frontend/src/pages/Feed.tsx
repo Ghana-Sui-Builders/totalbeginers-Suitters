@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import { useZkLogin } from '../zklogin/useZkLogin';
 import { API_ENDPOINTS } from '../config/api';
@@ -37,6 +37,9 @@ export const Feed: React.FC = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [postLoading, setPostLoading] = useState(false);
   const [postError, setPostError] = useState<string | null>(null);
+  const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
+  const [imageFileName, setImageFileName] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Austin: Get display name
   const getDisplayName = () => {
@@ -130,7 +133,7 @@ export const Feed: React.FC = () => {
           profileId: profile.objectId,
           userAddress: userAddress,
           content: newPostContent,
-          imageUrl: '',
+          imageUrl: imageDataUrl || '',
         }),
       });
 
@@ -141,6 +144,7 @@ export const Feed: React.FC = () => {
 
       // Austin: Clear content and refresh posts after successful creation
       setNewPostContent('');
+      clearSelectedImage();
       
       // Austin: Reload posts to show the new post
       const postsResponse = await fetch(API_ENDPOINTS.posts);
@@ -163,6 +167,34 @@ export const Feed: React.FC = () => {
       setPostError(err instanceof Error ? err.message : 'Failed to create post');
     } finally {
       setPostLoading(false);
+    }
+  };
+
+  const handleImageButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      clearSelectedImage();
+      return;
+    }
+
+    setImageFileName(file.name);
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImageDataUrl(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const clearSelectedImage = () => {
+    setImageDataUrl(null);
+    setImageFileName('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -272,18 +304,20 @@ export const Feed: React.FC = () => {
             
             <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
               <div className="flex items-center gap-1">
-                <button className="flex items-center justify-center p-2 rounded-full text-primary hover:bg-primary/10">
+                <button
+                  type="button"
+                  className="flex items-center justify-center p-2 rounded-full text-primary hover:bg-primary/10"
+                  onClick={handleImageButtonClick}
+                >
                   <span className="material-symbols-outlined text-xl">image</span>
                 </button>
-                <button className="flex items-center justify-center p-2 rounded-full text-primary hover:bg-primary/10">
-                  <span className="material-symbols-outlined text-xl">gif_box</span>
-                </button>
-                <button className="flex items-center justify-center p-2 rounded-full text-primary hover:bg-primary/10">
-                  <span className="material-symbols-outlined text-xl">poll</span>
-                </button>
-                <button className="flex items-center justify-center p-2 rounded-full text-primary hover:bg-primary/10">
-                  <span className="material-symbols-outlined text-xl">sentiment_satisfied</span>
-                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
               </div>
               <div className="flex items-center gap-3">
                 {/* Austin: Character counter */}
@@ -291,6 +325,14 @@ export const Feed: React.FC = () => {
                   <span className={`text-sm ${newPostContent.length > 280 ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'}`}>
                     {newPostContent.length}/280
                   </span>
+                )}
+                {imageFileName && (
+                  <div className="text-xs text-slate-500 dark:text-slate-300 flex items-center gap-2">
+                    <span>Image: {imageFileName}</span>
+                    <button type="button" className="text-primary" onClick={clearSelectedImage}>
+                      Remove
+                    </button>
+                  </div>
                 )}
                 {/* Austin: Enabled post button with onClick handler and loading state */}
                 <button 
