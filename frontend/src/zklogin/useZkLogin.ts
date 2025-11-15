@@ -22,6 +22,7 @@ interface UseZkLoginReturn {
   userAddress: string | null;
   decodedJWT: DecodedJWT | null;
   error: string | null;
+  ephemeralKeyPair: string | null;
   login: () => Promise<void>;
   logout: () => void;
 }
@@ -33,6 +34,7 @@ export function useZkLogin(): UseZkLoginReturn {
   const [userAddress, setUserAddress] = useState<string | null>(null);
   const [decodedJWT, setDecodedJWT] = useState<DecodedJWT | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [ephemeralKeyPair, setEphemeralKeyPair] = useState<string | null>(null);
 
 //Check for existing session or OAuth redirect on mount
   useEffect(() => {
@@ -49,6 +51,7 @@ export function useZkLogin(): UseZkLoginReturn {
     if (session?.userAddress && session?.jwt) {
       setIsAuthenticated(true);
       setUserAddress(session.userAddress);
+      setEphemeralKeyPair(session.ephemeralKeyPair || null);
       try {
         const decoded = decodeJWT(session.jwt);
         setDecodedJWT(decoded);
@@ -161,6 +164,7 @@ export function useZkLogin(): UseZkLoginReturn {
 
       setUserAddress(derivedAddress);
       setIsAuthenticated(true);
+      setEphemeralKeyPair(session.ephemeralKeyPair);
       setIsLoading(false);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to complete login';
@@ -179,6 +183,7 @@ export function useZkLogin(): UseZkLoginReturn {
     setIsAuthenticated(false);
     setUserAddress(null);
     setDecodedJWT(null);
+    setEphemeralKeyPair(null);
     setError(null);
     setIsReady(true);
   }, []);
@@ -190,6 +195,7 @@ export function useZkLogin(): UseZkLoginReturn {
     userAddress,
     decodedJWT,
     error,
+    ephemeralKeyPair,
     login,
     logout,
   };
