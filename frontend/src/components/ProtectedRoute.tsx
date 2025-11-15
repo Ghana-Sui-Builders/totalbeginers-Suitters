@@ -42,7 +42,7 @@ function LoadingScreen() {
 }
 
 export const ProtectedRoute: React.FC<Props> = ({ children }) => {
-  const { isAuthenticated: isZkLoginAuthenticated, isLoading: isZkLoginLoading } = useZkLogin();
+  const { isAuthenticated: isZkLoginAuthenticated, isLoading: isZkLoginLoading, isReady: isZkLoginReady } = useZkLogin();
   
   // Austin: useCurrentAccount returns the account object or null
   // If it exists, wallet is connected
@@ -54,7 +54,7 @@ export const ProtectedRoute: React.FC<Props> = ({ children }) => {
   
   // Austin: For now, only check zkLogin loading state
   // Wallet connection is synchronous after initial load
-  const isLoading = isZkLoginLoading;
+  const isLoading = isZkLoginLoading || !isZkLoginReady;
   
   const location = useLocation();
 

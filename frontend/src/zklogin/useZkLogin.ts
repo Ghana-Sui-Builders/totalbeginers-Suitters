@@ -17,6 +17,7 @@ import type { DecodedJWT } from './types';
 
 interface UseZkLoginReturn {
   isLoading: boolean;
+  isReady: boolean;
   isAuthenticated: boolean;
   userAddress: string | null;
   decodedJWT: DecodedJWT | null;
@@ -27,6 +28,7 @@ interface UseZkLoginReturn {
 
 export function useZkLogin(): UseZkLoginReturn {
   const [isLoading, setIsLoading] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userAddress, setUserAddress] = useState<string | null>(null);
   const [decodedJWT, setDecodedJWT] = useState<DecodedJWT | null>(null);
@@ -55,6 +57,7 @@ export function useZkLogin(): UseZkLoginReturn {
         clearZkLoginSession();
       }
     }
+    setIsReady(true);
   }, []);
 
   /**
@@ -85,6 +88,7 @@ export function useZkLogin(): UseZkLoginReturn {
       setError(errorMessage);
       console.error('Login error:', err);
       setIsLoading(false);
+      setIsReady(true);
     }
   }, []);
 
@@ -176,10 +180,12 @@ export function useZkLogin(): UseZkLoginReturn {
     setUserAddress(null);
     setDecodedJWT(null);
     setError(null);
+    setIsReady(true);
   }, []);
 
   return {
     isLoading,
+    isReady,
     isAuthenticated,
     userAddress,
     decodedJWT,

@@ -73,6 +73,7 @@ export default function Landing() {
     return <LoadingScreen />;
   }
 
+  // Austin: If not loading and not authenticated, show the login page
   return (
     <div className="landing-page" style={{ fontFamily: "'Plus Jakarta Sans', 'Noto Sans', sans-serif" }}>
       <style>{`

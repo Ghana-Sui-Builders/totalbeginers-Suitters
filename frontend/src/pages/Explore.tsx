@@ -1,23 +1,37 @@
 // Austin: NEW FILE - Explore page with search and trending content
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Explore: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <>
       <div className="sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-10">
         <div className="px-4 py-3">
-          <label className="flex flex-col min-w-40 h-12 w-full">
-            <div className="flex w-full flex-1 items-stretch rounded-full h-full">
-              <div className="text-[#9caeba] flex border-none bg-slate-200 dark:bg-[#283239] items-center justify-center pl-4 rounded-l-full border-r-0">
-                <span className="material-symbols-outlined">search</span>
+          <form onSubmit={handleSearch}>
+            <label className="flex flex-col min-w-40 h-12 w-full">
+              <div className="flex w-full flex-1 items-stretch rounded-full h-full">
+                <div className="text-[#9caeba] flex border-none bg-slate-200 dark:bg-[#283239] items-center justify-center pl-4 rounded-l-full border-r-0">
+                  <span className="material-symbols-outlined">search</span>
+                </div>
+                <input 
+                  className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-full text-black dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border-none bg-slate-200 dark:bg-[#283239] focus:border-none h-full placeholder:text-slate-500 dark:placeholder:text-[#9caeba] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" 
+                  placeholder="Search" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
               </div>
-              <input 
-                className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-full text-black dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border-none bg-slate-200 dark:bg-[#283239] focus:border-none h-full placeholder:text-slate-500 dark:placeholder:text-[#9caeba] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" 
-                placeholder="Search" 
-                defaultValue=""
-              />
-            </div>
-          </label>
+            </label>
+          </form>
         </div>
         <div className="border-b border-slate-200 dark:border-[#3b4a54]">
           <div className="flex justify-between">

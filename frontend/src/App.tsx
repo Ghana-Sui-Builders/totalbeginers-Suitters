@@ -1,5 +1,6 @@
 import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
-import { BrowserRouter, Routes, Route, Link, Outlet, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { ZkLoginButton } from './zklogin/ZkLoginButton';
 import { useZkLogin } from './zklogin/useZkLogin';
 import Landing from "./pages/Landing";
@@ -13,6 +14,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Explore from './pages/Explore';
 import Notifications from './pages/Notifications';
 import Messages from './pages/Messages';
+import Search from './pages/Search';
 
 /**
  * LeftSidebar Component - Austin: Updated with new navigation links
@@ -102,16 +104,32 @@ function LeftSidebar() {
  * RightSidebar Component - Austin: Trends and suggestions sidebar
  */
 function RightSidebar() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <aside className="w-[350px] ml-8 hidden lg:block h-screen overflow-y-auto">
       <div className="sticky top-0 py-4 flex flex-col gap-4">
         {/* Search Bar */}
-        <div className="relative">
+        <form onSubmit={handleSearch} className="relative">
           <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">
             search
           </span>
-          <input className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-full h-11 pl-12 pr-4 text-black dark:text-white placeholder:text-slate-500 focus:ring-2 focus:ring-primary" placeholder="Search" type="text" />
-        </div>
+          <input 
+            className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-full h-11 pl-12 pr-4 text-black dark:text-white placeholder:text-slate-500 focus:ring-2 focus:ring-primary" 
+            placeholder="Search" 
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </form>
         
         {/* Trends for you */}
         <div className="bg-slate-100 dark:bg-slate-800 rounded-xl">
@@ -200,6 +218,7 @@ function AppContent() {
       <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
         <Route path="/feed" element={<Feed />} />
         <Route path="/create" element={<CreatePost />} />
+        <Route path="/search" element={<Search />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/messages" element={<Messages />} />
