@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { normalizeSuiAddress } from '@mysten/sui/utils';
 import {
   generateEphemeralKeyAndNonce,
   getGoogleLoginURL,
@@ -130,9 +131,6 @@ export function useZkLogin(): UseZkLoginReturn {
 
       // Compute zkLogin address seed
       const addressSeed = computeZkLoginAddress(salt, decoded);
-      
-      // Import address utilities from Sui SDK
-      const { normalizeSuiAddress } = await import('@mysten/sui/utils');
       
       // The zkLogin address is computed using genAddressSeed which returns a BigInt string
       // Convert the address seed to a 32-byte array and then to a Sui address
