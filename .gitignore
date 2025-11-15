@@ -1,16 +1,22 @@
-# Dependencies
+# ============================================================================
+# SUITTER PROJECT - Combined .gitignore
+# ============================================================================
+
+# Node.js / JavaScript / TypeScript
 node_modules/
 .pnp
 .pnp.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Testing
-coverage/
-*.log
-
-# Production
+# Dependencies & Build
 build/
 dist/
 *.tsbuildinfo
+coverage/
 
 # Environment variables
 .env
@@ -19,37 +25,22 @@ dist/
 .env.test.local
 .env.production.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# OS Files
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-*.swp
-*~
+Thumbs.db
 
 # Logs
 logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Backup files
+# Temporary & Backup files
+*.tmp
+*.temp
 *.backup
 *.backup2
 *.corrupted
 *.old
+*~
 
 # Sui Move build artifacts
 contract/build/
@@ -62,19 +53,44 @@ contract/build/
 *-keypair.json
 private-key.txt
 
-# IDE
-.vscode/
+# IDE & Editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/*.code-snippets
 .idea/
 *.sublime-project
 *.sublime-workspace
-
-# Temporary files
-*.tmp
-*.temp
+.vs/
+.history/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 .cache/
 
-# Package manager lock files (keep pnpm-lock.yaml but ignore others if needed)
-# Uncomment if you want to ignore lock files:
+# Visual Studio specific
+*.rsuser
+*.userprefs
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+*.vsix
+
+# Package manager lock files (optional - uncomment to ignore)
 # pnpm-lock.yaml
 # package-lock.json
 # yarn.lock
