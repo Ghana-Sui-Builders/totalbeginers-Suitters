@@ -52,15 +52,18 @@ This backend uses **Enoki SDK** for gas sponsorship, eliminating the need for pr
 
 
 
-```bash### 1. Install Dependencies
+```bash
+### 1. Install Dependencies
 
 pnpm install
-
-``````bash
+```
+```bash
 
 npm install
 
-### 2. Environment Setup```
+### 2. Environment Setup
+
+```
 
 
 
@@ -68,11 +71,13 @@ Create a `.env` file:### 2. Configure Environment
 
 
 
-```bashCopy `.env.example` to `.env` and fill in your values:
+```bash
+Copy `.env.example` to `.env` and fill in your values:
 
 # Get this from https://portal.enoki.mystenlabs.com/
 
-ENOKI_API_KEY=enk_...```bash
+ENOKI_API_KEY=enk_...
+```bash
 
 cp .env.example .env
 
